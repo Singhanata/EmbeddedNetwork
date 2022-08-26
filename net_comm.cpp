@@ -69,6 +69,7 @@ void NET_comm::ack_callback(mac_header_t * h){
 }
 
 byte NET_comm::find_nexthop(byte dID){
+#ifndef STATIC_NET
   for (int i=0; i<net_stat.child_count; i++){            
     if (subnode[i].isActive){                                     // device is active
       if (subnode[i].id == dID){                                  // destination is descendant
@@ -77,6 +78,17 @@ byte NET_comm::find_nexthop(byte dID){
     }
   }
   return pr_address.dID;                                          // destination not belong to this node
+#else
+#ifdef STAR_NET
+  return 0;
+#else
+  if (dID > 0) {
+    return (dID-1);
+  } else {
+    return 0;
+  }
+#endif
+#endif
 }
 
 void NET_comm::fail_callback(mac_header_t * h, slot_t * s){

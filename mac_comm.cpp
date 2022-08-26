@@ -23,30 +23,31 @@ void MAC_comm::mac_routine(){
 }
 
 bool MAC_comm::receive_callback(slot_t * s){
-  bool isReceiver = true;
-  if(!(Header::checkaddress(device_address, h_rx.recipient)|| // check device address
-        Header::checkbroadcast(h_rx.recipient))) {
-          net->overhear_callback(&h_rx);
-          isReceiver = false;                                 // check broadcast address
+  bool isToThis = Header::checkaddress(device_address, h_rx.recipient); // check device address 
+  bool isReceiver = (isToThis||Header::checkbroadcast(h_rx.recipient)); // check broadcast address & device address
+  if(!isReceiver) {            
+          net->overhear_callback(&h_rx);               
   }
-  byte type = (*s).md.type & MSG_TYPE_MASK;
+  byte type = ((*s).md.type & MSG_TYPE_MASK);
   switch (type){
   case MSG_TYPE_BEACON:
     // check address 
     // invoke network callback
-    net->beacon_callback(&h_rx, s);                                   // callback NET layer
+    net->beacon_callback(&h_rx, s);                 // callback NET layer
     return true;
   case MSG_TYPE_NON:
-    // message correcttly received
-    net->non_callback(s);                           // callback NET layer
+    if (isReceiver) {
+      // message correctly received
+      net->non_callback(s);                         // callback NET layer      
+    }
     return true;
   case MSG_TYPE_CON:
-    if (!Header::checkaddress(device_address, h_rx.recipient)) {return false;}
+    if (!isToThis) {return false;}
     net->con_callback(s);                           // callback NET layer
     mac_send_ack(s);                                // send ACK to sender
     return true;
   case MSG_TYPE_ACK:
-    if (!Header::checkaddress(device_address, h_rx.recipient)) {return false;}
+    if (!isToThis) {return false;}
     if ((*session.slot).md.id == (*s).md.id){       // check ID
       // clear session
       session.isOnProcess = false;                  // close the CON session

@@ -4,7 +4,7 @@
 
 #define WDT_TIMEOUT             2
 #define NET_PREFIX              'A'
-#define DEVICE_ID               1                
+#define DEVICE_ID               0                
 
 MSG_buffer bufferMSG;
 NET_comm netC;

@@ -2,6 +2,8 @@
 #define _COM_DEF_H
 
 #define PHY_TEST
+#define STATIC_NET
+#define STAR_NET
   
 /****************************************************************************************************
 *                                        FRAME DEFINITION                                           * 

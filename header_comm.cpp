@@ -76,19 +76,21 @@ String Header::tostring(meta_data_t m){
   s += "<D:";
   s += (char)m.destination.nP;
   s += (char)m.destination.dID;
-  s += "O:";
+  s += " O:";
   s += (char)m.origin.nP;
   s += (char)m.origin.dID;
   s += ">";
 
-  if (m.type & MSG_TYPE_MASK == MSG_TYPE_BEACON){
+  if (m.type == MSG_TYPE_BEACON) {
     s += "<BEA>";         
-  } else if (m.type & MSG_TYPE_MASK == MSG_TYPE_NON){
+  } else if (m.type == MSG_TYPE_NON){
     s += "<NON>";
-  } else if (m.type & MSG_TYPE_MASK == MSG_TYPE_CON){
+  } else if (m.type == MSG_TYPE_CON){
     s += "<CON>";
-  } else if (m.type & MSG_TYPE_MASK == MSG_TYPE_ACK){
+  } else if (m.type == MSG_TYPE_ACK){
     s += "<ACK>";
+  } else {
+    s += "<UNKNOWN>";
   }
   s += "<ID:";
   s += String(m.id, DEC);

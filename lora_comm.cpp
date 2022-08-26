@@ -40,8 +40,8 @@ void LoRa_comm::onReceive(int packetSize){
   b = LoRa.read();
   if (b == STOP_SYM){   
     // packet correctly received, incoke callback function
-//    mac->receive_callback(s);                       // invoke callback function in MAC
     Serial.println(Header::tostring(*s));
+    mac->receive_callback(s);                       // invoke callback function in MAC
 #ifdef PHY_TEST
     performanceTest((*s).md.id);
 #endif
@@ -51,7 +51,7 @@ void LoRa_comm::onReceive(int packetSize){
     while (LoRa.available()){
       f += (char)LoRa.read();
     }
-    s->access_count = 0;                              // set buffer slot free
+    s->access_count = 0;                            // set buffer slot free
     reportLoRaError(ERROR_LENGTH_MISMATCH, f);      // report error
     return;                                         // skip rest of function
   }
