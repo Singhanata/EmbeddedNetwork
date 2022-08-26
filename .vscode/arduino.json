@@ -1,0 +1,6 @@
+{
+    "board": "Heltec-esp32:esp32:wifi_lora_32_V2",
+    "port": "COM3",
+    "sketch": "ht_rec_test.ino",
+    "output": "../ArduinoOutput"
+}
