@@ -347,7 +347,12 @@
                 "__ATOMIC_ACQ_REL=4",
                 "__ATOMIC_RELEASE=3",
                 "USBCON"
-            ]
+            ],
+            "browse": {
+                "path": [
+                    "C:\\Users\\krong\\OneDrive\\AllgemeinDokumente\\Arduino\\libraries\\NET_custom"
+                ]
+            }
         }
     ]
 }

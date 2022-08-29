@@ -5,7 +5,8 @@ int ploss;
 void LoRa_comm::onReceive(int packetSize){
   //Serial.println("onreceive"); 
   if (packetSize == 0) return;          // if there's no packet, return
-  slot_t * s = m_buffer->get_allocate();
+  slot_t temp;
+  slot_t * s = &temp;
   // read packet header bytes:
   byte b = LoRa.read();
   if (b == START_SYM){
@@ -30,7 +31,6 @@ void LoRa_comm::onReceive(int packetSize){
     while (LoRa.available()){
       f += (char) LoRa.read();                      // get all characters from radio
     }
-    s->access_count = 0;                           // set buffer slot free
     reportLoRaError(ERROR_MISSING_START_SYM, f);    // report error missing start symbol
     return;
   }
@@ -41,7 +41,9 @@ void LoRa_comm::onReceive(int packetSize){
   if (b == STOP_SYM){   
     // packet correctly received, incoke callback function
     // Serial.println(Header::tostring(*s));
-    mac->receive_callback(s);                       // invoke callback function in MAC
+    slot_t * ss = m_buffer->get_allocate();
+    *ss = temp;
+    mac->receive_callback(ss);                       // invoke callback function in MAC
 #ifdef PHY_TEST
     performanceTest((*s).md.id);
 #endif

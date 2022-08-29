@@ -7,18 +7,21 @@ slot_t * MSG_buffer::get_allocate(){
   for (int i=0; i<BUFFER_SIZE; i++ ){
     if (slot[pointerIn].access_count > 0){
       // slot is occupied
-      // increase pointer
+      // increase count up to max.
       slot[pointerIn].access_count++;
-      pointerIn++;
       if (slot[pointerIn].access_count > MAX_ACCESS_COUNT){
         slot[pointerIn].access_count = MAX_ACCESS_COUNT;
       }
+      //Increase pointer up to BUFFER SIZE
+      pointerIn++;
       if (pointerIn >= BUFFER_SIZE){
         pointerIn -= BUFFER_SIZE;
       }
       continue;
+    } else {
+      // slot vacant return 
+      return &slot[pointerIn];
     }
-    return &slot[pointerIn];
   }
   // pointer has rotated one round
   // free slot not found

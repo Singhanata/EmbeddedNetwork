@@ -25,7 +25,7 @@ void MAC_comm::mac_routine(){
 bool MAC_comm::receive_callback(slot_t * s){
   bool isToThis = Header::checkaddress(device_address, h_rx.recipient); // check device address 
   bool isReceiver = (isToThis||Header::checkbroadcast(h_rx.recipient)); // check broadcast address & device address
-  if(!isReceiver) {            
+  if(!isReceiver) { //Overhearing Packets not meant for this node           
           net->overhear_callback(&h_rx);               
   }
   byte type = ((*s).md.type & MSG_TYPE_MASK);
@@ -38,11 +38,13 @@ bool MAC_comm::receive_callback(slot_t * s){
   case MSG_TYPE_NON:
     if (isReceiver) {
       // message correctly received
+      (*s).access_count = 1;                        // buffer slot marked
       net->non_callback(s);                         // callback NET layer      
     }
     return true;
   case MSG_TYPE_CON:
     if (!isToThis) {return false;}
+    (*s).access_count = 1;                          // buffer slot marked
     net->con_callback(s);                           // callback NET layer
     mac_send_ack(s);                                // send ACK to sender
     return true;
@@ -50,6 +52,7 @@ bool MAC_comm::receive_callback(slot_t * s){
     if (!isToThis) {return false;}
     if ((*session.slot).md.id == (*s).md.id){       // check ID
       // clear session
+      (*s).access_count = 1;                        // buffer slot marked
       session.isOnProcess = false;                  // close the CON session
       session.attempt_count = 0;                    // reset attempt count
       net->ack_callback(&h_rx);                     // report outcome    
