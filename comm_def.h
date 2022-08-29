@@ -1,7 +1,7 @@
 #ifndef _COM_DEF_H
 #define _COM_DEF_H
 
-#define PHY_TEST
+// #define PHY_TEST
 #define STATIC_NET
 #define STAR_NET
   
@@ -300,7 +300,9 @@ typedef struct {
 typedef struct {
   bool isActive = false;              // is node active?
   byte id;                            // device id
-  byte nexthop;                       // device id of nexthop           
+  byte nexthop;                       // device id of nexthop
+  int pLoss = 0;
+  byte mID = 0;           
 } subnode_t;
 // network status information
 typedef struct {
@@ -469,6 +471,8 @@ class NET_comm {
      * @return false requested subnode is not in the record list
      */
     bool register_subnode(byte dID, byte nID);
+
+    void performanceTest(address_t * sender, byte id);
 
   public:
 

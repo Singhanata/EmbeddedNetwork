@@ -36,6 +36,7 @@ void NET_comm::non_callback(slot_t * s){
     // message to this node
     (*s).access_count = 0;    // mark memory slot occupied
     serial_send(s);           // send packet via serial port
+    performanceTest(&(*s).md.origin, (*s).md.id);
   } else {                    // not for this node
     // forward immediately
     if ((*s).md.destination.nP == (*mac).device_address.nP){  // check net prefix
@@ -303,4 +304,37 @@ void NET_comm::assign_pr_address(byte nP, byte dID){
 void NET_comm::serial_send(slot_t * s){
   String out = Header::tostring(*s);
   Serial.println(out);
+}
+
+void NET_comm::performanceTest(address_t * s, byte id){
+  // Serial.println(" NET Eval");
+  int cID = (int)id;
+  // Serial.print("cID");
+  // Serial.println(cID);
+  int idx = (*s).dID - 48;
+  // Serial.print("idx");
+  // Serial.println(idx);
+  int lastID = (int)subnode[idx].mID;
+  // Serial.print("lastID");
+  // Serial.println(lastID);
+  // check begin 
+  if (lastID == cID){
+    // at the begin do nothing
+  } else { 
+    //not at the begin, check loop
+    if (cID < lastID){
+      //already loop, reset and report
+      subnode[idx].pLoss += (cID + 255) - lastID;
+      Serial.print("N");
+      Serial.print(idx);
+      Serial.print(": ");
+      Serial.print(subnode[idx].pLoss);
+      Serial.println(" packet Loss from 255 packets");
+      subnode[idx].pLoss = 0;
+    } else {
+      // general cases
+      subnode[idx].pLoss = cID - (lastID + 1);
+    }
+  }
+  subnode[idx].mID = cID;
 }

@@ -42,12 +42,12 @@ void loop() {
   h.recipient.nP = NET_PREFIX;
   h.recipient.dID = '0';
   h.sender.nP = NET_PREFIX;
-  h.sender.dID = '1';
+  h.sender.dID = '0'+ DEVICE_ID;
 
   md.destination.nP = NET_PREFIX;
   md.destination.dID = '0';
   md.origin.nP = NET_PREFIX;
-  md.origin.dID = '1';
+  md.origin.dID = '0'+ DEVICE_ID;
 
   md.type = MSG_TYPE_NON;
   md.id = msg_count;

@@ -40,7 +40,7 @@ void LoRa_comm::onReceive(int packetSize){
   b = LoRa.read();
   if (b == STOP_SYM){   
     // packet correctly received, incoke callback function
-    Serial.println(Header::tostring(*s));
+    // Serial.println(Header::tostring(*s));
     mac->receive_callback(s);                       // invoke callback function in MAC
 #ifdef PHY_TEST
     performanceTest((*s).md.id);
