@@ -33,6 +33,7 @@ bool MAC_comm::receive_callback(slot_t * s){
   case MSG_TYPE_BEACON:
     // check address 
     // invoke network callback
+    (*s).access_count = 1;                          // buffer slot marked
     net->beacon_callback(&h_rx, s);                 // callback NET layer
     return true;
   case MSG_TYPE_NON:

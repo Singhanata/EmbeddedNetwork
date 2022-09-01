@@ -10,7 +10,7 @@ void NET_comm::beacon_callback(mac_header_t * h, slot_t * s){
     byte outcome = read_request(s);                           // process flow of BEACON REQ
     if (!outcome){                                            // successful outcome
       net_stat.status |= NET_STAT_PR_UPDATE;                  // mark PR need to be updated 
-      NET_comm::send_response(s);                                       // send response
+      NET_comm::send_response(s);                             // send response
     } else {
       // TODO: report error: request invalid
     }

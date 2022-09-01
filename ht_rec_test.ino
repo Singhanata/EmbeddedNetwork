@@ -37,7 +37,7 @@ void loop() {
   // Serial.println("loop");
   loRaC.onReceive(LoRa.parsePacket());
   // routine data process
-  node_routine();
+  // node_routine();
   // serial session to send and receive data via serial port
   // serialC.session();
   esp_task_wdt_reset();
