@@ -1,10 +1,12 @@
 #ifndef _COM_DEF_H
 #define _COM_DEF_H
 
+// --------------------- COMMUNICATION SETTING ---------------------
 // #define PHY_TEST
 #define STATIC_NET
 #define STAR_NET
-  
+#define LORA_TIMEOUT            6000 
+
 /****************************************************************************************************
 *                                        FRAME DEFINITION                                           * 
 *****************************************************************************************************/
@@ -591,6 +593,7 @@ class LoRa_comm {
   private:
     byte lastID = 0;
     int pLoss = 0;
+    long lastRecTimeStp = 0;
     /// report error in the reception process
     void reportLoRaError(String err, String f);
     void performanceTest(byte id);
@@ -598,6 +601,13 @@ class LoRa_comm {
   public:
     MSG_buffer * m_buffer;
     MAC_comm * mac;
+    /**
+     * @brief This function reset LoRa in case no reception for 
+     * a certain period of time
+     *      * 
+     * @return ** whether loRa is reset!! 
+     */
+    bool loRaWatchdog();
     /**
      * @brief This callback function is called after parsing LoRa packet
      * 

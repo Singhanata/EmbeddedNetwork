@@ -10,6 +10,7 @@ void LoRa_comm::onReceive(int packetSize){
   // read packet header bytes:
   byte b = LoRa.read();
   if (b == START_SYM){
+    lastRecTimeStp = millis();
     // Starting point of the packet detected
     // Begin reading header
     // save to MAC Header
@@ -37,6 +38,8 @@ void LoRa_comm::onReceive(int packetSize){
   for (int i=0; i < (*s).md.len; i++){
     (*s).content[i] = (char)LoRa.read();
   }
+  // add string ending
+  (*s).content[(*s).md.len] = '/0';
   b = LoRa.read();
   if (b == STOP_SYM){   
     // packet correctly received, incoke callback function
@@ -111,4 +114,24 @@ void LoRa_comm::performanceTest(byte id){
     }
   }
   lastID = cID;
+}
+
+bool LoRa_comm::loRaWatchdog() {
+#ifdef LORA_TIMEOUT
+  Serial.print(".");
+  Serial.print(".");
+  Serial.print(".");
+  Serial.println("            ---ATTEMPT RESET LORA");
+  if (millis() - lastRecTimeStp > LORA_TIMEOUT) {
+    lastRecTimeStp = millis();
+    // LoRa reset
+    LoRa.flush();
+    LoRa.end();
+    if(!LoRa.begin(BAND, true)) {
+      Serial.println("ATTEMPT FALED...!");
+    } else {
+      Serial.println("LORA RESET... SUCCESS");
+    }
+  }
+#endif
 }
