@@ -40,6 +40,7 @@ void loop() {
   // node_routine();
   // serial session to send and receive data via serial port
   // serialC.session();
+  loRaC.loRaWatchdog();
   esp_task_wdt_reset();
 }
 
