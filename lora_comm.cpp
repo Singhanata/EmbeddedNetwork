@@ -39,7 +39,7 @@ void LoRa_comm::onReceive(int packetSize){
     (*s).content[i] = (char)LoRa.read();
   }
   // add string ending
-  (*s).content[(*s).md.len] = '/0';
+  (*s).content[(*s).md.len] = '\0';
   b = LoRa.read();
   if (b == STOP_SYM){   
     // packet correctly received, incoke callback function
