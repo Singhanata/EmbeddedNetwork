@@ -118,11 +118,11 @@ void LoRa_comm::performanceTest(byte id){
 
 bool LoRa_comm::loRaWatchdog() {
 #ifdef LORA_TIMEOUT
-  Serial.print(".");
-  Serial.print(".");
-  Serial.print(".");
-  Serial.println("            ---ATTEMPT RESET LORA");
   if (millis() - lastRecTimeStp > LORA_TIMEOUT) {
+    Serial.print(".");
+    Serial.print(".");
+    Serial.print(".");
+    Serial.println("            ---ATTEMPT RESET LORA");
     lastRecTimeStp = millis();
     // LoRa reset
     LoRa.flush();
