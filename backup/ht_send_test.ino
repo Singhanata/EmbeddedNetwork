@@ -5,6 +5,7 @@
 #define WDT_TIMEOUT             2
 #define NET_PREFIX              'A'
 #define DEVICE_ID               0
+#define MEAN_SEND_DELAY         1
 
 MSG_buffer bufferMSG;
 //NET_comm netC;
@@ -57,4 +58,6 @@ void loop() {
   msg_count++;
   Serial.println("send");
   esp_task_wdt_reset();
+  int pr = MEAN_SEND_DELAY/2 + random(MEAN_SEND_DELAY) 
+  delay(pr)
 }
