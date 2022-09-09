@@ -333,7 +333,7 @@ void NET_comm::performanceTest(address_t * s, byte id){
       subnode[idx].pLoss = 0;
     } else {
       // general cases
-      subnode[idx].pLoss = cID - (lastID + 1);
+      subnode[idx].pLoss += cID - (lastID + 1);
     }
   }
   subnode[idx].mID = cID;
