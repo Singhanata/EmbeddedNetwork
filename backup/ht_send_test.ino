@@ -56,7 +56,8 @@ void loop() {
 
   loRaC.onSend(h,md,content);
   msg_count++;
-  Serial.println("send");
+  Serial.print("Sent: ID");
+  Serial.println(msg_count);
   esp_task_wdt_reset();
   int pr = MEAN_SEND_DELAY/2 + random(MEAN_SEND_DELAY) 
   delay(pr)
